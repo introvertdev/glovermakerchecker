@@ -1,62 +1,161 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# Glover Maker-Checker
 
-## About Laravel
+Using Laravel 8 PHP framework, I have developed an API for an administrative
+system that makes use of maker-checker rules for creating, updating and deleting user data.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+#### This API is also accessible at https://techdomot.com/glovermakerchecker/api
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+#### Task Description
+A maker-checker system revolves around the idea that for any change to be made to user
+information by an administrator, it must be approved by a fellow administrator in order to take
+effect; and if the request is declined, the change isn’t persisted. For each request submited, an email is sent to notify other administrators.
+######
+The user information (editable by the administrator) comprises of three details:
+#####
+● The user’s first name
+#####
+● The user’s last name
+#####
+● The user’s email address.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Learning Laravel
+## API Reference
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+#### Adminstrator signup
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```http
+  POST /api/register
+```
 
-## Laravel Sponsors
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `email` | `string` | **Required**. Adminstrator's email address|
+| `password` | `string` | **Required**. Adminstrator's password|
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+#### Admistrator login
 
-### Premium Partners
+```http
+  POST /api/login
+```
+ **NOTE:**  `Once logged in, an Authorization token (called TOKEN) will be generated which will be used for authentication on protected API routes`
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `email` | `string` | **Required**. Adminstrator's email address|
+| `password` | `string` | **Required**. Adminstrator's password|
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/)**
-- **[OP.GG](https://op.gg)**
 
-## Contributing
+#### Admistrator logout
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```http
+  POST /api/logout
+```
+ **NOTE:**  `Once logged out, the Authorization token (called TOKEN) is destroyed.`
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `email` | `string` | **Required**. Adminstrator's email address|
+| `password` | `string` | **Required**. Adminstrator's password|
 
-## Code of Conduct
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+#### Create a customer
 
-## Security Vulnerabilities
+```http
+  POST /api/create-customer
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+ **Authorization**  `Set value to Bearer TOKEN`
 
-## License
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `first_name` | `string` | **Required**. Customer's first name|
+| `last_name` | `string` | **Required**. Customer's last name|
+| `email` | `string` | **Required**. Customer's email address|
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+#### View single customer
+
+```http
+  GET /api/find-customer/{id}
+```
+
+ **Authorization**  `Set value to Bearer TOKEN`
+
+#### Create a "CREATE" request
+
+```http
+  POST /api/create-operation
+```
+
+ **Authorization**  `Set value to Bearer TOKEN`
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `first_name` | `string` | **Required**. Customer's first name|
+| `last_name` | `string` | **Required**. Customer's last name|
+| `email` | `string` | **Required**. Customer's email address|
+| `request_type` | `enum` | **Required**. "create"|
+
+
+#### Create an "UPDATE" request
+
+```http
+  POST /api/create-operation
+```
+
+ **Authorization**  `Set value to Bearer TOKEN`
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `first_name` | `string` | *Optional*. Customer's first name|
+| `last_name` | `string` | *Optional*. Customer's last name|
+| `email` | `string` | *Optional*. Customer's email address|
+| `user_id` | `int` | **Required**. Customer's ID|
+| `request_type` | `enum` | **Required**. "update"|
+
+
+#### Create a "DELETE" request
+
+```http
+  POST /api/create-operation
+```
+
+ **Authorization**  `Set value to Bearer TOKEN`
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `first_name` | `string` | *Optional*. Customer's first name|
+| `last_name` | `string` | *Optional*. Customer's last name|
+| `email` | `string` | *Optional*. Customer's email address|
+| `user_id` | `int` | **Required**. Customer's ID|
+| `request_type` | `enum` | **Required**. "delete"|
+
+#### View pending requests
+
+```http
+  GET /api/pending-operations
+```
+
+ **Authorization**  `Set value to Bearer TOKEN`
+
+#### View single request
+
+```http
+  GET /api/find-operation/{id}
+```
+
+ **Authorization**  `Set value to Bearer TOKEN`
+
+#### Approve request
+
+```http
+  PUT /api/approve-operation/{id}
+```
+
+ **Authorization**  `Set value to Bearer TOKEN`
+
+#### Decline request
+
+```http
+  DELETE /api/reject-operation/{id}
+```
+
+ **Authorization**  `Set value to Bearer TOKEN`
