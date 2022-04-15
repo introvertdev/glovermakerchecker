@@ -193,7 +193,6 @@ class OperationController extends Controller
         }
 
         return response([
-            'request_type' => $type,
             'requested_change' => $operation,
            // 'customer_data' => $customer
         ], 200);
