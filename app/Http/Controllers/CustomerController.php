@@ -33,7 +33,10 @@ class CustomerController extends Controller
         ]);
         
         //Run operation
-        return Customer::create($request->all());
+        return response([
+            'message' => 'Customer data created successfully',
+            'customer_data' => Customer::create($request->all())
+        ], 201);
     }
 
     /**
