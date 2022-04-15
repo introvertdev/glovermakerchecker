@@ -95,6 +95,7 @@ To this (I have added the "stream" array)
 | :-------- | :------- | :------------------------- |
 | `email` | `string` | **Required**. Adminstrator's email address|
 | `password` | `string` | **Required**. Adminstrator's password|
+| `password_confirmation` | `string` | **Required**. Confirm Adminstrator's password|
 
 #### Admistrator login
 
